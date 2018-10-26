@@ -9,6 +9,7 @@ from city import *
 from vehicle import *
 from pygame.locals import *
 from attributes import *
+from ui import *
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
     pygame.init()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+    BASICFONT = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
 
     mousex = 0 # used to store x coordinate of mouse event 
     mousey = 0 # used to store y coordinate of mouse event
@@ -30,6 +32,9 @@ def main():
     vehicles = []
     vehicles.append(vehicle)
 
+    ui = UI()
+
+    money = 2000
     selvehicle = None
 
     while True: # main game loop
@@ -39,6 +44,8 @@ def main():
         for city in cities:
             city.drawCity(DISPLAYSURF)
         vehicle.drawVehicle(DISPLAYSURF)
+        ui.drawRects(DISPLAYSURF)
+        ui.drawMoney(DISPLAYSURF, money, BASICFONT)
 
         checkForQuit()
 
