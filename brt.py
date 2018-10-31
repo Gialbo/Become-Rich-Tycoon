@@ -4,7 +4,7 @@
 # Made by Gilberto Manunza
 # A simple commerce based tycoon game
 
-import pygame, sys
+import pygame, sys, time
 from city import *
 from vehicle import *
 from pygame.locals import *
@@ -44,10 +44,13 @@ def main():
         for city in cities:
             city.drawCity(DISPLAYSURF)
         vehicle.drawVehicle(DISPLAYSURF)
-        ui.drawRects(DISPLAYSURF)
+        ui.drawRect(DISPLAYSURF)
         ui.drawMoney(DISPLAYSURF, money, BASICFONT)
+        if(selvehicle and selvehicle.rTime):
+            ui.drawRTime(DISPLAYSURF, selvehicle.rTime - selvehicle.elTime, BASICFONT)
 
         checkForQuit()
+
 
         for event in pygame.event.get(): # event handling loop
             if event.type == MOUSEMOTION:
@@ -71,7 +74,6 @@ def main():
         if vehiclehig != None and mouseClicked:
             vehiclehig.highlightVehicle(DISPLAYSURF)
             selvehicle = vehiclehig
-            vehiclehig = None
         if vehiclehig == None and cityhig == None and mouseClicked:
             selvehicle = None
 
