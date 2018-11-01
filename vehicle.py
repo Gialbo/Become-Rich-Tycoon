@@ -10,6 +10,8 @@ class Vehicle():
         self.city = city
         self.x = city.x + CITYSIZE / 2
         self.y = city.y + CITYSIZE / 2
+        self.relx = self.x
+        self.rely = self.y
         self.destination = None
         self.state = VehicleState.ARRIVED
         self.color = random.choice(VEHICLECOLORS)
@@ -17,9 +19,16 @@ class Vehicle():
 
     
     def drawVehicle(self, surf):
-        pygame.draw.circle(surf, self.color, (int(self.x), int(self.y)), VEHICLERADIUS)
+        if(self.relx < WINDOWWIDTH and self.rely < WINDOWHEIGHT):
+            pygame.draw.circle(surf, self.color, (int(self.relx), int(self.rely)), VEHICLERADIUS)
         #Use for debugging
         #pygame.draw.rect(surf,self.color, self.vehicleRect)
+
+    def updateRelCoords(self, cameraX, cameraY):
+        self.relx = self.x + cameraX
+        self.rely = self.y + cameraY
+        self.vehicleRect.x = self.relx
+        self.vehicleRect.y = self.rely
 
     def setVehicleDestination(self, destination):
         if(self.destination == None and destination != self.city):
@@ -39,7 +48,7 @@ class Vehicle():
             self.elTime = time.time() - self.startTime
 
     def isArrived(self):
-        if self.destination != None and self.destination.cityRect.collidepoint(self.x, self.y):
+        if self.destination != None and self.destination.cityRect.collidepoint(self.relx, self.rely):
             self.state = VehicleState.ARRIVED
             self.x, self.y = self.destination.cityVec
             self.vehicleRect.left, self.vehicleRect.top = self.x - VEHICLERADIUS / 2, self.y - VEHICLERADIUS / 2
@@ -48,6 +57,6 @@ class Vehicle():
             self.rTime = None
     
     def highlightVehicle(self, surf):
-        pygame.draw.circle(surf, HIGHLIGHTCOLOR, (int(self.x), int(self.y)), VEHICLERADIUS + 1, 4)
+        pygame.draw.circle(surf, HIGHLIGHTCOLOR, (int(self.relx), int(self.rely)), VEHICLERADIUS + 1, 4)
 
     

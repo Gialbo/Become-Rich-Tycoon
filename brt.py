@@ -21,6 +21,8 @@ def main():
 
     mousex = 0 # used to store x coordinate of mouse event 
     mousey = 0 # used to store y coordinate of mouse event
+    camerax = 0 
+    cameray = 0 
     pygame.display.set_caption('Became Rich Tycoon')
 
     cities = []
@@ -30,6 +32,9 @@ def main():
     vehicle = Vehicle(cities[0])
     vehicle.setVehicleDestination(cities[1])
     vehicles = []
+    vehicles.append(vehicle)
+    vehicle = Vehicle(cities[1])
+    vehicle.setVehicleDestination(cities[0])
     vehicles.append(vehicle)
 
     ui = UI()
@@ -42,8 +47,11 @@ def main():
 
         DISPLAYSURF.fill(BGCOLOR)
         for city in cities:
+            city.updateRelCoords(camerax, cameray)
             city.drawCity(DISPLAYSURF)
-        vehicle.drawVehicle(DISPLAYSURF)
+        for vehicle in vehicles:
+            vehicle.updateRelCoords(camerax, cameray)
+            vehicle.drawVehicle(DISPLAYSURF)
         ui.drawRect(DISPLAYSURF)
         ui.drawMoney(DISPLAYSURF, money, BASICFONT)
         if(selvehicle and selvehicle.rTime):
@@ -53,11 +61,8 @@ def main():
 
 
         for event in pygame.event.get(): # event handling loop
-            if event.type == MOUSEMOTION:
-                mousex, mousey = event.pos
-            if event.type == MOUSEBUTTONUP:
-                mousex, mousey = event.pos
-                mouseClicked = True
+            mousex, mousey, mouseClicked = getMouseEvents(event, mousex, mousey, mouseClicked)
+            camerax, cameray = getCameraMovement(event, camerax, cameray)
 
         cityhig = getCityAtPixel(cities, mousex, mousey)
         vehiclehig = getVehicleAtPixel(vehicles, mousex, mousey)
@@ -79,12 +84,38 @@ def main():
 
         if selvehicle != None:
             selvehicle.highlightVehicle(DISPLAYSURF)
-        vehicle.travel()
-        vehicle.isArrived()
+            ui.drawMenuOpeningAnimation(DISPLAYSURF)
+        else:
+            ui.drawMenuClosingAnimation(DISPLAYSURF)
+
+        for vehicle in vehicles:
+            vehicle.travel()
+            vehicle.isArrived()
         
         # Redraw the screen and wait a clock tick
         pygame.display.update()
         FPSCLOCK.tick(FPS)
+
+def getCameraMovement(event, camerax, cameray):
+    if(event.type == KEYUP):
+        if event.key == K_UP:
+            cameray += CAMERASPEED
+        if event.key == K_DOWN:
+            cameray -= CAMERASPEED
+        if event.key == K_LEFT:
+            camerax += CAMERASPEED
+        if event.key == K_RIGHT:
+            camerax -= CAMERASPEED
+
+    return camerax, cameray
+
+def getMouseEvents(event, mousex, mousey, mouseClicked):
+    if event.type == MOUSEMOTION:
+        mousex, mousey = event.pos
+    if event.type == MOUSEBUTTONUP:
+        mousex, mousey = event.pos
+        mouseClicked = True
+    return mousex, mousey, mouseClicked
 
 def checkForQuit():
     for event in pygame.event.get(QUIT):
