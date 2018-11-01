@@ -34,10 +34,11 @@ class UI():
 
 
     def drawMenuOpeningAnimation(self, surf):
-        if(self.isMenuOpen == False):
+        if(self.isMenuOpen == False or self.isMenuClosing):
             if(self.isMenuOpening == False):
                 self.isMenuOpening = True
-                self.coverage = 0
+                self.isMenuClosing = False
+                #self.coverage = 0
             
             if(self.isMenuOpening):
                 self.coverage += MENUANIMATIONSPEED
@@ -50,21 +51,26 @@ class UI():
         pygame.draw.rect(surf, ORANGE, (0, UIRECTSIZE / 5, UIMENUSIZE * self.coverage, WINDOWHEIGHT))
 
     def drawMenuClosingAnimation(self, surf):
-        if(self.isMenuOpen):
+        if(self.coverage >= 0):
             if(self.isMenuClosing == False):
                 self.isMenuClosing = True
-                self.coverage = 1
+                self.isMenuOpening = False
+                self.isMenuOpen = False
+                #self.coverage = 1
             
             if(self.isMenuClosing):
                 self.coverage -= MENUANIMATIONSPEED
 
             if(self.coverage <= 0):
-                self.isMenuOpen = False
                 self.isMenuClosing = False
     
         pygame.draw.rect(surf, ORANGE, (0, UIRECTSIZE / 5, UIMENUSIZE * self.coverage, WINDOWHEIGHT))
 
-
+    def drawCityMenu(self, surf, city, font):
+        if self.isMenuOpen:
+            (textSurf, textRect) = self.makeText(city.name, WHITE, WINDOWHEIGHT / 8, UIRECTSIZE / 5, font) 
+            surf.blit(textSurf, textRect)
+            self.printInventory(surf,city, font)
         
     def makeText(self, text, color, top, left, font):
         # create the Surface and Rect object for some text

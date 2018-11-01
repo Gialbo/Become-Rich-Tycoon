@@ -28,14 +28,14 @@ def main():
     pygame.display.set_caption('Became Rich Tycoon')
 
     cities = []
-    cities.append(City(400, 300))
-    cities.append(City(250, 500))
+    cities.append(City("Milano", 400, 300))
+    cities.append(City("Torino", 250, 500))
     
-    vehicle = Vehicle(cities[0])
+    vehicle = Vehicle("TurboDaily", cities[0])
     vehicle.setVehicleDestination(cities[1])
     vehicles = []
     vehicles.append(vehicle)
-    vehicle = Vehicle(cities[1])
+    vehicle = Vehicle("IvecoCargo", cities[1])
     vehicle.setVehicleDestination(cities[0])
     vehicles.append(vehicle)
 
@@ -43,39 +43,51 @@ def main():
 
     money = 2000
     selvehicle = None
+    selcity = None
 
     while True: # main game loop
         mouseClicked = False
 
         DISPLAYSURF.fill(BGCOLOR)
         for city in cities:
+            # update relative camera coordinates
             city.updateRelCoords(camerax, cameray)
+            # draw city
             city.drawCity(DISPLAYSURF)
         for vehicle in vehicles:
+            # update relative camera coordinates
             vehicle.updateRelCoords(camerax, cameray)
+            # draw vehicle
             vehicle.drawVehicle(DISPLAYSURF)
+        # draw UI upper bar
         ui.drawRect(DISPLAYSURF)
+        # display money on screen
         ui.drawMoney(DISPLAYSURF, money, BASICFONT)
+        # display remaining time until destination if there's a vehicle moving
         if selvehicle and selvehicle.rTime:
             ui.drawRTime(DISPLAYSURF, selvehicle.rTime - selvehicle.elTime, BASICFONT)
 
         checkForQuit()
 
-
         for event in pygame.event.get(): # event handling loop
             mousex, mousey, mouseClicked = getMouseEvents(event, mousex, mousey, mouseClicked)
             camerax, cameray = getCameraMovement(event, camerax, cameray)
 
+        # get object at mouse position
         cityhig = getCityAtPixel(cities, mousex, mousey)
         vehiclehig = getVehicleAtPixel(vehicles, mousex, mousey)
 
+        # handling city selection
         if cityhig != None:
             cityhig.highlightCity(DISPLAYSURF)
         if cityhig != None and mouseClicked:
+            selcity = cityhig
             cityhig.highlightCity(DISPLAYSURF)
+            # assign a destination to selected vehicle
             if selvehicle != None:
                 selvehicle.setVehicleDestination(cityhig)
 
+        # handling vehicle selection
         if vehiclehig != None:
             vehiclehig.highlightVehicle(DISPLAYSURF)
         if vehiclehig != None and mouseClicked:
@@ -83,14 +95,22 @@ def main():
             selvehicle = vehiclehig
         if vehiclehig == None and cityhig == None and mouseClicked:
             selvehicle = None
+            selcity = None
 
-        if selvehicle != None:
-            selvehicle.highlightVehicle(DISPLAYSURF)
+        # handle menu opening/closing animation
+        if selvehicle != None or selcity != None:
             ui.drawMenuOpeningAnimation(DISPLAYSURF)
-            ui.printInventory(DISPLAYSURF, selvehicle, MENUFONT)
         else:
             ui.drawMenuClosingAnimation(DISPLAYSURF)
 
+        if selvehicle != None:
+            selvehicle.highlightVehicle(DISPLAYSURF)
+            ui.printInventory(DISPLAYSURF, selvehicle, MENUFONT)
+
+        if selcity != None:
+            selcity.highlightCity(DISPLAYSURF)
+            ui.drawCityMenu(DISPLAYSURF, selcity, MENUFONT)
+        
         for vehicle in vehicles:
             vehicle.travel()
             vehicle.isArrived()

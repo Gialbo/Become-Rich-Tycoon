@@ -7,7 +7,8 @@ from enum import Enum
 VehicleState = Enum('State', 'ARRIVED TRAVELLING')
 
 class Vehicle():
-    def __init__(self, city):
+    def __init__(self, name, city):
+        self.name = name
         self.city = city
         self.x = city.x + CITYSIZE / 2
         self.y = city.y + CITYSIZE / 2
@@ -23,7 +24,7 @@ class Vehicle():
     def drawVehicle(self, surf):
         if(self.relx < WINDOWWIDTH and self.rely < WINDOWHEIGHT):
             pygame.draw.circle(surf, self.color, (int(self.relx), int(self.rely)), VEHICLERADIUS)
-        #Use for debugging
+        # uncomment for debugging
         #pygame.draw.rect(surf,self.color, self.vehicleRect)
 
     def updateRelCoords(self, cameraX, cameraY):
