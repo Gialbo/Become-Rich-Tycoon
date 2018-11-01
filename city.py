@@ -1,6 +1,7 @@
 #/usr/bin/python3
 
 import pygame, random
+from inventory import *
 from attributes import *
 from pygame.locals import *
 
@@ -14,6 +15,7 @@ class City():
         self.cityVec = pygame.math.Vector2(x + (CITYSIZE / 2), y + (CITYSIZE / 2))
         self.color = random.choice(CITYCOLORS)
         self.cityRect = pygame.Rect(x, y, CITYSIZE, CITYSIZE)
+        self.inventory = Inventory()
     
     def drawCity(self, surf):
         if(self.relx < WINDOWWIDTH and self.rely < WINDOWHEIGHT):
@@ -27,4 +29,8 @@ class City():
     
     def highlightCity(self, surf):
         pygame.draw.rect(surf, HIGHLIGHTCOLOR, (self.relx - (HIGHLIGHTOFFSET / 2), self.rely - (HIGHLIGHTOFFSET / 2), CITYSIZE + HIGHLIGHTOFFSET, CITYSIZE + HIGHLIGHTOFFSET), 4)
+    
+    def getInventoryEntry(self, n):
+        entryItem = self.inventory.inventory[n]
+        return entryItem.name + " " + str(entryItem.quantity) + " " + str(entryItem.effectivevalue)
 

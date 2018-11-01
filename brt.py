@@ -18,6 +18,8 @@ def main():
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BASICFONT = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
+    MENUFONT = pygame.font.Font('freesansbold.ttf', MENUFONTSIZE)
+
 
     mousex = 0 # used to store x coordinate of mouse event 
     mousey = 0 # used to store y coordinate of mouse event
@@ -54,7 +56,7 @@ def main():
             vehicle.drawVehicle(DISPLAYSURF)
         ui.drawRect(DISPLAYSURF)
         ui.drawMoney(DISPLAYSURF, money, BASICFONT)
-        if(selvehicle and selvehicle.rTime):
+        if selvehicle and selvehicle.rTime:
             ui.drawRTime(DISPLAYSURF, selvehicle.rTime - selvehicle.elTime, BASICFONT)
 
         checkForQuit()
@@ -85,6 +87,7 @@ def main():
         if selvehicle != None:
             selvehicle.highlightVehicle(DISPLAYSURF)
             ui.drawMenuOpeningAnimation(DISPLAYSURF)
+            ui.printInventory(DISPLAYSURF, selvehicle, MENUFONT)
         else:
             ui.drawMenuClosingAnimation(DISPLAYSURF)
 

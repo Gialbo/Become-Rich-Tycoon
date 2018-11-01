@@ -1,0 +1,10 @@
+Bricks 100
+Smartphones 1500
+Documents 600
+Books 300
+Timber 150
+Wine 500
+Beer 200
+Iron 300
+Pottery 450
+Bikes 350

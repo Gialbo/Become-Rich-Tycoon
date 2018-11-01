@@ -1,5 +1,6 @@
 import pygame, random, math, time
 from city import *
+from inventory import *
 from attributes import *
 from enum import Enum
 
@@ -16,6 +17,7 @@ class Vehicle():
         self.state = VehicleState.ARRIVED
         self.color = random.choice(VEHICLECOLORS)
         self.vehicleRect = pygame.Rect(self.x - VEHICLERADIUS, self.y - VEHICLERADIUS, VEHICLERADIUS * 2, VEHICLERADIUS * 2)
+        self.inventory = Inventory()
 
     
     def drawVehicle(self, surf):
@@ -27,8 +29,8 @@ class Vehicle():
     def updateRelCoords(self, cameraX, cameraY):
         self.relx = self.x + cameraX
         self.rely = self.y + cameraY
-        self.vehicleRect.x = self.relx
-        self.vehicleRect.y = self.rely
+        self.vehicleRect.x = self.relx - VEHICLERADIUS
+        self.vehicleRect.y = self.rely - VEHICLERADIUS
 
     def setVehicleDestination(self, destination):
         if(self.destination == None and destination != self.city):
@@ -58,5 +60,9 @@ class Vehicle():
     
     def highlightVehicle(self, surf):
         pygame.draw.circle(surf, HIGHLIGHTCOLOR, (int(self.relx), int(self.rely)), VEHICLERADIUS + 1, 4)
+        
+    def getInventoryEntry(self, n):
+        entryItem = self.inventory.inventory[n]
+        return entryItem.name + " " + str(entryItem.quantity) + " " + str(entryItem.effectivevalue)
 
     

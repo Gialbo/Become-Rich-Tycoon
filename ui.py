@@ -23,6 +23,16 @@ class UI():
         (textSurf, textRect) = self.makeText(rTimeSTR, WHITE, WINDOWWIDTH / 2, 0, font)
         surf.blit(textSurf, textRect)
 
+    def printInventory(self, surf, iObj, font):
+        if self.isMenuOpen:
+            itemx = UIRECTSIZE / 10
+            itemy = WINDOWHEIGHT / 5
+            for i in range(NUMBEROFITEMS):
+                (textSurf, textRect) = self.makeText(iObj.getInventoryEntry(i), WHITE, itemx, itemy, font)
+                surf.blit(textSurf, textRect)
+                itemy += MENUFONTSIZE + 1
+
+
     def drawMenuOpeningAnimation(self, surf):
         if(self.isMenuOpen == False):
             if(self.isMenuOpening == False):
