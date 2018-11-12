@@ -105,7 +105,8 @@ def main():
 
         if selvehicle != None:
             selvehicle.highlightVehicle(DISPLAYSURF)
-            ui.printInventory(DISPLAYSURF, selvehicle, MENUFONT)
+            if selcity == None:
+                ui.printInventory(DISPLAYSURF, selvehicle, MENUFONT)
 
         if selcity != None:
             selcity.highlightCity(DISPLAYSURF)

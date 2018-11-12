@@ -4,4 +4,5 @@ class Item():
         self.name = name
         self.quantity = quantity
         self.basevalue = basevalue
-        self.effectivevalue = self.basevalue
+        self.buyvalue = basevalue
+        self.sellvalue = basevalue

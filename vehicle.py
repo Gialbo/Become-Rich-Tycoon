@@ -64,6 +64,6 @@ class Vehicle():
         
     def getInventoryEntry(self, n):
         entryItem = self.inventory.inventory[n]
-        return entryItem.name + " " + str(entryItem.quantity) + " " + str(entryItem.effectivevalue)
+        return entryItem.name + " " + str(entryItem.quantity) + " " + str(entryItem.buyvalue)
 
     

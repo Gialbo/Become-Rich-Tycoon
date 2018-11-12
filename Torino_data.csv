@@ -1,0 +1,11 @@
+GOOD        ,   QUANTITY MULTIPLIER,    DAILY PRODUCTION,   DAILY CONSUMPTION,  BASE PRICE MULTIPLIER
+Bricks      ,   1                  ,    20              ,   10               ,  1                
+Smartphones ,   0.05               ,    8               ,   5                ,  0.8
+Documents   ,   0.1                ,    8               ,   10               ,  1.1
+Books       ,   0.3                ,    10              ,   12               ,  1.2
+Timber      ,   1.5                ,    20              ,   10               ,  1
+Wine        ,   0.4                ,    30              ,   15               ,  0.7
+Beer        ,   0.8                ,    15              ,   20               ,  1.2
+Iron        ,   0.65               ,    20              ,   22               ,  1.2
+Pottery     ,   0.3                ,    35              ,   8                ,  0.7
+Bikes       ,   0.3                ,    20              ,   13               ,  1.3
