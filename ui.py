@@ -11,6 +11,7 @@ class UI():
         self.isMenuOpening = False
         self.isMenuClosing = False
         self.coverage = 0
+        self.uiRect =pygame.Rect(0, 0, UIMENUSIZE, WINDOWHEIGHT)
     
     class Button():
         def __init__(self, bTop, bLeft, bColor, bText, font):
@@ -22,14 +23,24 @@ class UI():
             self.clickable = True
             self.visible = True
             self.handler = None
+            self.bRect = pygame.Rect(bTop, bLeft, BUTTONWIDTH, BUTTONHEIGHT)
+            self.args = None
         
-        def onClick(self, handler):
+        def onClick(self, handler, *args):
             if self.clickable and self.visible:
+                self.args = args
                 self.handler = handler
+        
+        def eventClicked(self):
+            self.handler(*self.args)
         
         def draw(self, surf):
            pygame.draw.rect(surf, self.bColor, (self.bTop, self.bLeft, BUTTONWIDTH, BUTTONHEIGHT)) 
-           makeText(bText, bColor, bTop + BUTTONWIDTH / 2, bLeft, self.font)
+           (textSurf, textRect) = makeText(self.bText, BLACK, self.bTop + BUTTONWIDTH / 15, self.bLeft, self.font)
+           surf.blit(textSurf, textRect)
+
+        def highlight(self, surf):
+            pygame.draw.rect(surf,BLUE, (self.bTop, self.bLeft, BUTTONWIDTH, BUTTONHEIGHT), 2)
         
     def createButton(self, surf, bTop, bLeft, bColor, bText):
         button = Button(bTop, bLeft, bColor, bText)
@@ -55,7 +66,7 @@ class UI():
             for i in range(NUMBEROFITEMS):
                 (textSurf, textRect) = makeText(iObj.getInventoryEntry(i), WHITE, itemx, itemy, font)
                 surf.blit(textSurf, textRect)
-                itemy += MENUFONTSIZE + 1
+                itemy += MENUFONTSIZE + BUTTONHEIGHT + 5
 
             if type(iObj) == city.City:
                 for i in range(NUMBEROFITEMS):
@@ -105,6 +116,26 @@ class UI():
     def clearInv(self, surf):
         if self.isMenuOpen:
             self.drawRect(surf)
+    
+    def showNoMoney(self, surf, font):
+        makeText("Not enough money!", RED, WINDOWWIDTH / 4, WINDOWHEIGHT / 20, font)
+    
+    def makeCityButtons(self, surf, font):
+        if(self.isMenuOpen):
+                itemx = UIRECTSIZE / 20
+                itemy = WINDOWHEIGHT / 5 + MENUFONTSIZE + 2
+                button_buy = []
+                button_sell =[]
+                for n in range(NUMBEROFITEMS):
+                    b = self.Button(itemx, itemy, GREEN, "BUY", font)
+                    button_buy.append(b)
+                    b.draw(surf)
+                    b = self.Button(itemx + BUTTONWIDTH + 5, itemy, RED, "SELL", font)
+                    button_sell.append(b)
+                    b.draw(surf)
+                    itemy += MENUFONTSIZE + BUTTONHEIGHT + 5
+                return (button_sell, button_buy)
+        return (None, None)
         
 def makeText(text, color, top, left, font):
     # create the Surface and Rect object for some text

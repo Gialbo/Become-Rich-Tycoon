@@ -64,8 +64,8 @@ class City():
             good_data = self.city_data.get(name, None)
             good = self.inventory.get(name)
             diff = (good_data["d_cons"] / good_data["d_prod"]) * good_data["b_pmul"] / good.quantity * 1000
-            good.buyvalue -=  diff / 2
-            good.sellvalue += diff * 2
+            good.buyvalue = good.basevalue - diff / 2
+            good.sellvalue = good.basevalue + diff * 2
 
 
                     
